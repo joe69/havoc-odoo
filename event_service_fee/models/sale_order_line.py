@@ -12,6 +12,10 @@ class SaleOrderLine(models.Model):
         """Trigger service fee calculation after creating order lines"""
         lines = super().create(vals_list)
         
+        # Skip if context flag is set (prevents recursion)
+        if self.env.context.get('skip_service_fee_update'):
+            return lines
+        
         # Collect all affected orders
         orders = lines.mapped('order_id')
         for order in orders:
@@ -24,6 +28,10 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         """Trigger service fee calculation after updating order lines"""
         result = super().write(vals)
+        
+        # Skip if context flag is set (prevents recursion)
+        if self.env.context.get('skip_service_fee_update'):
+            return result
         
         # Check if relevant fields were changed
         if any(field in vals for field in ['product_id', 'product_uom_qty', 'price_unit', 'event_id', 'event_ticket_id']):

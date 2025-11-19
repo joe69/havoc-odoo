@@ -16,6 +16,10 @@ class SaleOrder(models.Model):
         """
         self.ensure_one()
         
+        # Verhindere Rekursion
+        if self.env.context.get('skip_service_fee_update'):
+            return
+        
         # Hole das Service-Gebühr Produkt
         service_fee_product = self.env.ref('event_service_fee.product_service_fee', raise_if_not_found=False)
         if not service_fee_product:
@@ -37,7 +41,7 @@ class SaleOrder(models.Model):
             # Keine Event-Tickets mehr vorhanden -> lösche Service-Gebühr
             if existing_fee_lines:
                 _logger.info("[SERVICE FEE] Keine Event-Tickets mehr, lösche Service-Gebühr")
-                existing_fee_lines.unlink()
+                existing_fee_lines.with_context(skip_service_fee_update=True).unlink()
             return
 
         # Berechne Gesamtpreis aller Event-Tickets
@@ -54,7 +58,7 @@ class SaleOrder(models.Model):
         if service_fee_amount == 0:
             # Keine Gebühr nötig
             if existing_fee_lines:
-                existing_fee_lines.unlink()
+                existing_fee_lines.with_context(skip_service_fee_update=True).unlink()
             return
 
         # Erstelle oder aktualisiere Service-Gebühr Zeile
@@ -62,20 +66,20 @@ class SaleOrder(models.Model):
             # Behalte nur die erste Zeile, lösche alle anderen
             if len(existing_fee_lines) > 1:
                 _logger.info("[SERVICE FEE] Mehrere Service-Gebühr Zeilen gefunden, behalte nur eine")
-                existing_fee_lines[1:].unlink()
+                existing_fee_lines[1:].with_context(skip_service_fee_update=True).unlink()
                 existing_fee_lines = existing_fee_lines[0]
             else:
                 existing_fee_lines = existing_fee_lines[0]
 
             # Aktualisiere bestehende Zeile
-            existing_fee_lines.write({
+            existing_fee_lines.with_context(skip_service_fee_update=True).write({
                 'product_uom_qty': 1,
                 'price_unit': service_fee_amount,
             })
             _logger.info("[SERVICE FEE] Service-Gebühr aktualisiert: €%.2f", service_fee_amount)
         else:
             # Erstelle neue Service-Gebühr Zeile
-            self.env['sale.order.line'].create({
+            self.env['sale.order.line'].with_context(skip_service_fee_update=True).create({
                 'order_id': self.id,
                 'product_id': service_fee_product.id,
                 'product_uom_qty': 1,
