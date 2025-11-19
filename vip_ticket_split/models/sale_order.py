@@ -11,6 +11,9 @@ class SaleOrder(models.Model):
         for order in self:
             _logger.info("[VIP SPLIT] Auftragsbestätigung für %s", order.name)
 
+            # WICHTIG: Setze Context-Flag um Service-Gebühr Neuberechnung zu verhindern
+            order = order.with_context(skip_service_fee_update=True)
+
             # Finde VIP Gold Ticket Zeilen
             vip_gold_product = self.env.ref('vip_ticket_split.product_vip_gold_ticket', raise_if_not_found=False)
             vip_gold_lines = order.order_line.filtered(
@@ -122,7 +125,7 @@ class SaleOrder(models.Model):
                         beschreibung_zusatz = "\n" + "\n".join(antworten)
 
                 # 1. Erstelle die neue Ticket-Zeile (z.B. VIP GOLD für €100)
-                new_ticket_line = self.env['sale.order.line'].create({
+                new_ticket_line = self.env['sale.order.line'].with_context(skip_service_fee_update=True).create({
                     'order_id': order.id,
                     'product_id': ticket_product.id,
                     'product_uom_qty': 1,
@@ -132,7 +135,7 @@ class SaleOrder(models.Model):
                 
                 # Preis explizit nochmal setzen (nach Event-Zuweisung)
                 # damit er nicht vom Event-Ticket überschrieben wird
-                new_ticket_line.write({
+                new_ticket_line.with_context(skip_service_fee_update=True).write({
                     'price_unit': ticket_product.list_price,
                 })
                 
@@ -143,7 +146,7 @@ class SaleOrder(models.Model):
 
                 # 2. Wenn eine Registrierung existiert, aktualisiere sie
                 if reg:
-                    reg.write({
+                    reg.with_context(skip_service_fee_update=True).write({
                         'sale_order_line_id': new_ticket_line.id,
                         'event_ticket_id': event_ticket.id,
                     })
@@ -153,7 +156,7 @@ class SaleOrder(models.Model):
                     )
 
                 # 3. Erstelle die Package-Zeile (z.B. VIP GOLD PACKAGE)
-                package_line = self.env['sale.order.line'].create({
+                package_line = self.env['sale.order.line'].with_context(skip_service_fee_update=True).create({
                     'order_id': order.id,
                     'product_id': package_product.id,
                     'product_uom_qty': 1,
@@ -166,7 +169,7 @@ class SaleOrder(models.Model):
                 )
 
             # Lösche die ursprüngliche VIP-Zeile
-            line.unlink()
+            line.with_context(skip_service_fee_update=True).unlink()
             _logger.info(
                 "[VIP SPLIT] %s-Zeile ersetzt durch %s× Ticket & Package",
                 vip_type, quantity
