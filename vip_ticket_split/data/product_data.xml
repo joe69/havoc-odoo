@@ -1,0 +1,19 @@
+<odoo>
+    <data noupdate="1">
+        <record id="product_ticket" model="product.product">
+            <field name="name">Ticket</field>
+            <field name="default_code">TICKET</field>
+            <field name="type">service</field>
+            <field name="list_price">30.0</field>
+            <field name="sale_ok">True</field>
+        </record>
+
+        <record id="product_vip_package" model="product.product">
+            <field name="name">VIP Package</field>
+            <field name="default_code">VIP_PACKAGE</field>
+            <field name="type">service</field>
+            <field name="list_price">65.0</field>
+            <field name="sale_ok">True</field>
+        </record>
+    </data>
+</odoo>
