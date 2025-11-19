@@ -39,7 +39,7 @@
             <field name="list_price">95.0</field>
             <field name="sale_ok">True</field>
         </record>
-
+ 
         <!-- VIP (Ticket-Teil nach Split) -->
         <record id="product_vip" model="product.product">
             <field name="name">VIP</field>
