@@ -7,7 +7,7 @@
             <field name="name">VIP Gold Ticket</field>
             <field name="default_code">VIP_GOLD_TICKET</field>
             <field name="type">service</field>
-            <field name="list_price">95.0</field>
+            <field name="list_price">199.90</field>
             <field name="sale_ok">True</field>
         </record>
 
@@ -16,7 +16,7 @@
             <field name="name">VIP GOLD</field>
             <field name="default_code">VIP_GOLD</field>
             <field name="type">service</field>
-            <field name="list_price">65.0</field>
+            <field name="list_price">99.90</field>
             <field name="sale_ok">True</field>
         </record>
 
@@ -25,7 +25,7 @@
             <field name="name">VIP GOLD PACKAGE</field>
             <field name="default_code">VIP_GOLD_PACKAGE</field>
             <field name="type">service</field>
-            <field name="list_price">30.0</field>
+            <field name="list_price">100.0</field>
             <field name="sale_ok">True</field>
         </record>
 
@@ -36,7 +36,7 @@
             <field name="name">VIP Ticket</field>
             <field name="default_code">VIP_TICKET</field>
             <field name="type">service</field>
-            <field name="list_price">95.0</field>
+            <field name="list_price">149.90</field>
             <field name="sale_ok">True</field>
         </record>
  
@@ -45,7 +45,7 @@
             <field name="name">VIP</field>
             <field name="default_code">VIP</field>
             <field name="type">service</field>
-            <field name="list_price">65.0</field>
+            <field name="list_price">99.90</field>
             <field name="sale_ok">True</field>
         </record>
 
@@ -54,7 +54,7 @@
             <field name="name">VIP Package</field>
             <field name="default_code">VIP_PACKAGE</field>
             <field name="type">service</field>
-            <field name="list_price">30.0</field>
+            <field name="list_price">50.0</field>
             <field name="sale_ok">True</field>
         </record>
     </data>
