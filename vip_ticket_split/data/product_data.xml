@@ -1,18 +1,60 @@
 <odoo>
     <data noupdate="1">
-        <record id="product_ticket" model="product.product">
-            <field name="name">Ticket</field>
-            <field name="default_code">TICKET</field>
+        <!-- ========== VIP GOLD PRODUKTE ========== -->
+        
+        <!-- VIP Gold Ticket (wird gesplittet) -->
+        <record id="product_vip_gold_ticket" model="product.product">
+            <field name="name">VIP Gold Ticket</field>
+            <field name="default_code">VIP_GOLD_TICKET</field>
+            <field name="type">service</field>
+            <field name="list_price">95.0</field>
+            <field name="sale_ok">True</field>
+        </record>
+
+        <!-- VIP GOLD (Ticket-Teil nach Split) -->
+        <record id="product_vip_gold" model="product.product">
+            <field name="name">VIP GOLD</field>
+            <field name="default_code">VIP_GOLD</field>
+            <field name="type">service</field>
+            <field name="list_price">65.0</field>
+            <field name="sale_ok">True</field>
+        </record>
+
+        <!-- VIP GOLD PACKAGE (Package-Teil nach Split) -->
+        <record id="product_vip_gold_package" model="product.product">
+            <field name="name">VIP GOLD PACKAGE</field>
+            <field name="default_code">VIP_GOLD_PACKAGE</field>
             <field name="type">service</field>
             <field name="list_price">30.0</field>
             <field name="sale_ok">True</field>
         </record>
 
+        <!-- ========== STANDARD VIP PRODUKTE ========== -->
+
+        <!-- VIP Ticket (wird gesplittet) -->
+        <record id="product_vip_ticket" model="product.product">
+            <field name="name">VIP Ticket</field>
+            <field name="default_code">VIP_TICKET</field>
+            <field name="type">service</field>
+            <field name="list_price">95.0</field>
+            <field name="sale_ok">True</field>
+        </record>
+
+        <!-- VIP (Ticket-Teil nach Split) -->
+        <record id="product_vip" model="product.product">
+            <field name="name">VIP</field>
+            <field name="default_code">VIP</field>
+            <field name="type">service</field>
+            <field name="list_price">65.0</field>
+            <field name="sale_ok">True</field>
+        </record>
+
+        <!-- VIP Package (Package-Teil nach Split) -->
         <record id="product_vip_package" model="product.product">
             <field name="name">VIP Package</field>
             <field name="default_code">VIP_PACKAGE</field>
             <field name="type">service</field>
-            <field name="list_price">65.0</field>
+            <field name="list_price">30.0</field>
             <field name="sale_ok">True</field>
         </record>
     </data>
