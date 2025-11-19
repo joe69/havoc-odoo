@@ -121,7 +121,7 @@ class SaleOrder(models.Model):
                     if antworten:
                         beschreibung_zusatz = "\n" + "\n".join(antworten)
 
-                # 1. Erstelle die neue Ticket-Zeile (z.B. VIP GOLD für €65)
+                # 1. Erstelle die neue Ticket-Zeile (z.B. VIP GOLD für €100)
                 new_ticket_line = self.env['sale.order.line'].create({
                     'order_id': order.id,
                     'product_id': ticket_product.id,
@@ -129,9 +129,16 @@ class SaleOrder(models.Model):
                     'event_id': event_ticket.event_id.id,
                     'event_ticket_id': event_ticket.id,
                 })
+                
+                # Preis explizit nochmal setzen (nach Event-Zuweisung)
+                # damit er nicht vom Event-Ticket überschrieben wird
+                new_ticket_line.write({
+                    'price_unit': ticket_product.list_price,
+                })
+                
                 _logger.info(
-                    "[VIP SPLIT] Neue %s Ticket-Zeile mit ID %s erstellt.",
-                    vip_type, new_ticket_line.id
+                    "[VIP SPLIT] Neue %s Ticket-Zeile mit ID %s erstellt (Preis: €%.2f).",
+                    vip_type, new_ticket_line.id, new_ticket_line.price_unit
                 )
 
                 # 2. Wenn eine Registrierung existiert, aktualisiere sie
@@ -146,14 +153,16 @@ class SaleOrder(models.Model):
                     )
 
                 # 3. Erstelle die Package-Zeile (z.B. VIP GOLD PACKAGE)
-                self.env['sale.order.line'].create({
+                package_line = self.env['sale.order.line'].create({
                     'order_id': order.id,
                     'product_id': package_product.id,
                     'product_uom_qty': 1,
+                    'price_unit': package_product.list_price,  # Preis explizit setzen
                     'name': f"{package_product.name}{beschreibung_zusatz}",
                 })
                 _logger.info(
-                    "[VIP SPLIT] %s Package-Zeile erstellt.", vip_type
+                    "[VIP SPLIT] %s Package-Zeile erstellt (Preis: €%.2f).", 
+                    vip_type, package_line.price_unit
                 )
 
             # Lösche die ursprüngliche VIP-Zeile
