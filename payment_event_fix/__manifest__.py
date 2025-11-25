@@ -1,6 +1,6 @@
 # payment_country_fix/__manifest__.py
 {
-    "name": "Payment Country Fix",
+    "name": "Payment Event Fix",
     "version": "18.0.1.0.0",
     "summary": "Stellt sicher, dass beim Online-Payment immer ein gültiges Länderkürzel gesetzt ist.",
     "author": "Thomas & ChatGPT",
@@ -11,6 +11,7 @@
     ],
     "data": [],
     "installable": True,
-    "application": False, 
+    "application": False,
     "auto_install": False,
+    "license": "LGPL-3"
 }
